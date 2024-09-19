@@ -4,175 +4,291 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:movies_app/Ui/MovieDetails(homeTab)/Cubit/movie_details_view_model.dart';
 import 'package:movies_app/Ui/MovieDetails(homeTab)/Cubit/movie_states.dart';
 import 'package:movies_app/Ui/Utils/app_colors.dart';
-import 'package:movies_app/Ui/Utils/my_assets.dart';
 
 class MovieDetailsScreen extends StatelessWidget {
+  static const String routeName = 'movie_details';
   final int movieId;
   MovieDetailsScreen({required this.movieId});
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-        create:(context)=>MovieDetailsViewModel()..getAllDetails(movieId)..getAllSimilarDetails(movieId),
-      child:SafeArea(child: Scaffold(
+      create: (context) => MovieDetailsViewModel()
+        ..getAllDetails(movieId)
+        ..getAllSimilarDetails(movieId),
+      child: SafeArea(
+        child: Scaffold(
           appBar: AppBar(
-            title: Text('Movie Details'),
+            backgroundColor: Colors.transparent,
+            elevation: 0,
             leading: IconButton(
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-                icon: Icon(Icons.arrow_back)),
-            actions: [
-              IconButton(
-                onPressed:(){},
-                icon:Icon(Icons.share),
-              )
-            ],
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              icon: Icon(Icons.arrow_back, color: Colors.white),
+            ),
+            title: BlocBuilder<MovieDetailsViewModel, MovieDetailsStates>(
+              builder: (context, state) {
+                if (state is MovieDetailsLoadingState || state is MovieDetailsSuccessState) {
+                  final movieTitle = state is MovieDetailsSuccessState ? state.details.title : "Loading...";
+                  return Row(
+                    children: [
+                      SizedBox(width: 8.w),
+                      Expanded(
+                        child: Text(
+                          movieTitle ?? "No Title Available",
+                          style: TextStyle(color: Colors.white, fontSize: 18.sp),
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ),
+                    ],
+                  );
+                } else {
+                  return Container(); // Empty container if title is not available
+                }
+              },
+            ),
           ),
-          body: SingleChildScrollView(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                BlocBuilder<MovieDetailsViewModel,MovieDetailsStates>(
-                    builder:(context,state){
-                      if(state is MovieDetailsLoadingState){
-                        return Center(child: CircularProgressIndicator(),);
-                      }else if(state is MovieDetailsSuccessState){
-                        final movie = state.details;
-                        return Column(crossAxisAlignment: CrossAxisAlignment.start,
+          body: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Expanded(
+                child: BlocBuilder<MovieDetailsViewModel, MovieDetailsStates>(
+                  builder: (context, state) {
+                    if (state is MovieDetailsLoadingState) {
+                      return Center(
+                        child: CircularProgressIndicator(),
+                      );
+                    } else if (state is MovieDetailsSuccessState) {
+                      final movie = state.details;
+                      return SingleChildScrollView(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Stack(
                               children: [
-                               Image.network('https://image.tmdb.org/t/p/w500${movie.posterPath}',
-                                 fit: BoxFit.cover,),
-
-                                Positioned(left: 176.w,right: 176.w,bottom: 78.h,top: 79.h,
+                                Image.network(
+                                  movie.posterPath != null
+                                      ? 'https://image.tmdb.org/t/p/w500${movie.posterPath}'
+                                      : 'https://via.placeholder.com/500x250?text=No+Image',
+                                  width: double.infinity,
+                                  height: 250.h,
+                                  fit: BoxFit.cover,
+                                  errorBuilder: (context, error, stackTrace) {
+                                    return Center(child: Text('Image failed to load'));
+                                  },
+                                ),
+                                Positioned(
+                                  left: 176.w,
+                                  bottom: 78.h,
                                   child: CircleAvatar(
-                                    backgroundColor: AppColors.whiteColorText,
+                                    radius: 30,
+                                    backgroundColor: Colors.white,
                                     child: IconButton(
-                                        onPressed:(){},
-                                        icon:Icon(Icons.play_arrow)),
-                                  ),),
-
-
-                            Padding(padding:EdgeInsets.all(16),
+                                      icon: Icon(Icons.play_arrow, size: 30),
+                                      onPressed: () {},
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                            Padding(
+                              padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 10.h),
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                     Text(movie.title ??"No TiTle Available",
-                                  style: TextStyle(
-                                    fontSize: 12.sp,
-                                    fontWeight: FontWeight.bold,
-                                  ),)
-                                  ,
-                                  SizedBox(height: 3.h,),
-                                  Text('${movie.releaseDate ?? "No release data"},'
-                                      '${movie.runtime != null ?"${movie.runtime}mins":"No runTime Available"}',
-                                    style: TextStyle(color: AppColors.greyColor),
+                                  Text(
+                                    movie.title ?? "No Title Available",
+                                    style: TextStyle(
+                                      fontSize: 20.sp,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.white,
+                                    ),
                                   ),
-                                  SizedBox(height: 3.h,),
-                                  Row(
-                                    children:movie.genres!.map((genre){
-                                      return Padding(padding: EdgeInsets.only(right: 6.w),
-                                          child:ElevatedButton(
-                                            onPressed: (){},
-                                            child:Text(genre.name!),
-                                            style: ElevatedButton.styleFrom(
-                                                backgroundColor: AppColors.greyColor,
-                                                shape: RoundedRectangleBorder(
-                                                    borderRadius: BorderRadius.circular(8)
-                                                )
-                                            ),
-                                          ));
-                                    }).toList(),
+                                  SizedBox(height: 8.h),
+                                  Text(
+                                    '${movie.releaseDate ?? "No release date"}, ${movie.runtime != null ? "${movie.runtime} mins" : "No runtime"}',
+                                    style: TextStyle(
+                                      fontSize: 14.sp,
+                                      color: Colors.grey,
+                                    ),
                                   ),
-                                  SizedBox(height: 3.h,),
-                                  Text(movie.overview ??"No description available",
-                                    style: TextStyle(color: AppColors.greyColor),),
-                                  SizedBox(height: 3.h,),
+                                  SizedBox(height: 10.h),
                                   Row(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
                                     children: [
-                                      Icon(Icons.star,
-                                        color: AppColors.yellow,
+                                      ClipRRect(
+                                        borderRadius: BorderRadius.circular(8),
+                                        child: Image.network(
+                                          movie.posterPath != null
+                                              ? 'https://image.tmdb.org/t/p/w500${movie.posterPath}'
+                                              : 'https://via.placeholder.com/100x150?text=No+Image',
+                                          width: 100.w,
+                                          height: 150.h,
+                                          fit: BoxFit.contain,
+                                          errorBuilder: (context, error, stackTrace) {
+                                            return Center(child: Text('Image failed to load'));
+                                          },
+                                        ),
                                       ),
-                                      SizedBox(width: 4.w,),
-                                      Text(movie.voteAverage?.toString() ??"No Rating",
-                                        style: TextStyle(fontSize: 18.sp),)
-                                    ],
-                                  )
-                                ],
-                      ) ),]),
-                            SizedBox(height:20.h),
-                            Divider(),
-                          ],);
-                      }else if(state is MovieDetailsErrorState){
-                        return Center(child: Text(state.errorMsg),);
-                      }else{
-                        return Center(child: Text("Unexpected state occured"),);
-                      }
-                    }),
-                BlocBuilder<MovieDetailsViewModel,MovieDetailsStates>(
-                    builder:(context,state){
-                      if (state is MovieSimilarDetailsLoadingState){
-                        return Center(child: CircularProgressIndicator(),);
-                      }else if(state is MovieSimilarDetailsSuccessState){
-                        final similarDetails = state.details.results;
-                        if(similarDetails !=null && similarDetails.isNotEmpty){
-                          return Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Padding(padding: EdgeInsets.all(16),
-                                child: Text('More Like This',style: TextStyle(
-                                    fontSize: 18.sp,
-                                    fontWeight: FontWeight.bold
-                                ),),),
-                              Container(
-                                height: 150,
-                                child: ListView.builder(
-                                    scrollDirection: Axis.horizontal,
-                                    itemCount: similarDetails.length,
-                                    itemBuilder: (context,index){
-                                      final similarDetail = similarDetails[index];
-                                      return Padding(padding: EdgeInsets.only(left: 16),
+                                      SizedBox(width: 12.w),
+                                      Expanded(
                                         child: Column(
+                                          crossAxisAlignment: CrossAxisAlignment.start,
                                           children: [
-                                            Image.network('https://image.tmdb.org/t/p/w500${similarDetail.posterPath??""}',
-                                              width: 100.w,
-                                              height: 120.h,
-                                              fit: BoxFit.cover,
+                                            SizedBox(height: 10.h),
+                                            Text(
+                                              movie.title ?? "No Title Available",
+                                              style: TextStyle(
+                                                fontSize: 20.sp,
+                                                fontWeight: FontWeight.bold,
+                                                color: Colors.white,
+                                              ),
                                             ),
-                                            SizedBox(height: 8.h,),
+                                            SizedBox(height: 8.h),
+                                            Text(
+                                              '${movie.releaseDate ?? "No release date"}, ${movie.runtime != null ? "${movie.runtime} mins" : "No runtime"}',
+                                              style: TextStyle(
+                                                fontSize: 14.sp,
+                                                color: Colors.grey,
+                                              ),
+                                            ),
+                                            SizedBox(height: 10.h),
+                                            Wrap(
+                                              spacing: 6.w,
+                                              runSpacing: 6.h,
+                                              children: movie.genres!.map((genre) {
+                                                return Chip(
+                                                  label: Text(genre.name!),
+                                                  backgroundColor: Colors.grey.shade400,
+                                                );
+                                              }).toList(),
+                                            ),
+                                            SizedBox(height: 10.h),
+                                            Text(
+                                              movie.overview ?? "No description available",
+                                              style: TextStyle(color: Colors.grey.shade300, fontSize: 14.sp),
+                                            ),
+                                            SizedBox(height: 10.h),
                                             Row(
                                               children: [
-                                                Icon(Icons.star,
-                                                  color: AppColors.yellow,
-                                                  size: 16,),
-                                                SizedBox(width: 4.w,),
-                                                Text(similarDetail.voteAverage?.toString() ??"No Rating"),
+                                                Icon(Icons.star, color: Colors.amber),
+                                                SizedBox(width: 5.w),
+                                                Text(
+                                                  movie.voteAverage?.toString() ?? "No Rating",
+                                                  style: TextStyle(fontSize: 16.sp, color: Colors.white),
+                                                ),
                                               ],
-                                            )
+                                            ),
                                           ],
                                         ),
-                                      );
-                                    }),
+                                      ),
+                                    ],
+                                  ),
+                                  SizedBox(height: 20.h),
+                                  Divider(color: Colors.grey.shade800),
+                                ],
                               ),
-                              SizedBox(height: 20.h,),
-                            ],
-                          );}else{
-                          return Center(child: Text('No Similar Movies Found'),);
-                        }
-                      }else if(state is MovieSimilarDetailsErrorState){
-                        return Center(child: Text(state.errorMsg),);
-
-                      }else{
-                        return Center(child: Text("Unexpected state occured"),);
-                      }
-                    })
-              ],
-            ),
-          )
-      ))
-
+                            ),
+                          ],
+                        ),
+                      );
+                    } else {
+                      // Placeholder for the error message if details aren't available
+                      return Container(
+                        height: 250.h, // Adjust height as needed to match the size of the details section
+                        child: Center(child: Text("Unexpected state occurred", style: TextStyle(color: Colors.white, fontSize: 16.sp))),
+                      );
+                    }
+                  },
+                ),
+              ),
+              BlocBuilder<MovieDetailsViewModel, MovieDetailsStates>(
+                builder: (context, state) {
+                  if (state is MovieSimilarDetailsLoadingState) {
+                    return Container(
+                      height: 200.h,
+                      child: Center(
+                        child: CircularProgressIndicator(),
+                      ),
+                    );
+                  } else if (state is MovieSimilarDetailsSuccessState) {
+                    final similarDetails = state.details.results;
+                    return Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Padding(
+                          padding: EdgeInsets.all(16.w),
+                          child: Text(
+                            'More Like This',
+                            style: TextStyle(
+                              fontSize: 18.sp,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white,
+                            ),
+                          ),
+                        ),
+                        Container(
+                          height: 200.h,
+                          child: ListView.builder(
+                            scrollDirection: Axis.horizontal,
+                            itemCount: similarDetails!.length,
+                            itemBuilder: (context, index) {
+                              final similarDetail = similarDetails[index];
+                              return Padding(
+                                padding: EdgeInsets.only(left: 16.w),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Image.network(
+                                      similarDetail.posterPath != null
+                                          ? 'https://image.tmdb.org/t/p/w500${similarDetail.posterPath}'
+                                          : 'https://via.placeholder.com/120x160?text=No+Image',
+                                      width: 120.w,
+                                      height: 160.h,
+                                      fit: BoxFit.cover,
+                                      errorBuilder: (context, error, stackTrace) {
+                                        return Center(child: Text('Image failed to load'));
+                                      },
+                                    ),
+                                    SizedBox(height: 8.h),
+                                    Row(
+                                      children: [
+                                        Icon(
+                                          Icons.star,
+                                          color: Colors.amber,
+                                          size: 16,
+                                        ),
+                                        SizedBox(width: 4.w),
+                                        Text(
+                                          similarDetail.voteAverage?.toString() ?? "No Rating",
+                                          style: TextStyle(
+                                            color: Colors.white,
+                                            fontSize: 14.sp,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                              );
+                            },
+                          ),
+                        ),
+                        SizedBox(height: 20.h),
+                      ],
+                    );
+                  } else if (state is MovieSimilarDetailsErrorState) {
+                    return Center(child: Text(state.errorMsg));
+                  } else {
+                    return Center(child: Text("Unexpected state occurred"));
+                  }
+                },
+              ),
+            ],
+          ),
+        ),
+      ),
     );
   }
 }

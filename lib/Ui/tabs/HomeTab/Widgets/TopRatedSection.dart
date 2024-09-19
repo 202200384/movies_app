@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:movies_app/Data/Response/TopRatedOrPopularResponse.dart';
+import 'package:movies_app/Ui/MovieDetails(homeTab)/movie_details_screen.dart';
 import 'package:movies_app/Ui/Utils/app_colors.dart';
 import 'package:movies_app/Ui/tabs/HomeTab/Widgets/topRatedItem.dart';
 
@@ -43,7 +44,12 @@ class _TopRatedSectionState extends State<TopRatedSection> {
             itemCount: widget.topRatedList.length,
             itemBuilder: (context, index) {
               return InkWell(
-                onTap: () {},
+                onTap: () {
+                  Navigator.push(context,
+                      MaterialPageRoute(
+                          builder:(context)=>
+                              MovieDetailsScreen(movieId:widget.topRatedList[index].id!.toInt())));
+                },
                 child: TopRatedItem(
                   // Assuming CardItem is a widget you've defined
                   topratedorpopular:

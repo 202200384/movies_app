@@ -1,6 +1,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:movies_app/Ui/MovieDetails(homeTab)/movie_details_screen.dart';
 import 'package:movies_app/Ui/Utils/app_colors.dart';
 import 'package:movies_app/Ui/tabs/HomeTab/Widgets/upComingItem.dart';
 
@@ -43,7 +44,11 @@ class _upComingSectionState extends State<upComingSection> {
               itemCount: widget.upComingList.length,
               itemBuilder: (context, index) {
                 return InkWell(
-                  onTap: () {},
+                  onTap: () {
+                    Navigator.push(context,
+                      MaterialPageRoute(builder: (context)=>
+                      MovieDetailsScreen(movieId: widget.upComingList[index].id!.toInt())));
+                  },
                   child: Upcomingitem(
                     // Assuming CardItem is a widget you've defined
                     upcoming: widget.upComingList[index], // Pass correct data

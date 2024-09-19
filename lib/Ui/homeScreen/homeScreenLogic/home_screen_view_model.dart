@@ -2,7 +2,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:movies_app/Ui/homeScreen/homeScreenLogic/home_states.dart';
-import 'package:movies_app/Ui/tabs/BrowserTab/browser_screen_tab.dart';
+import 'package:movies_app/Ui/tabs/BrowserTab/Widget/browser_tab_screen.dart';
+
 import 'package:movies_app/Ui/tabs/HomeTab/Widgets/homeTab.dart';
 
 import 'package:movies_app/Ui/tabs/SearchTab/search_screen_tab.dart';

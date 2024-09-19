@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:movies_app/Data/Response/TopRatedOrPopularResponse.dart';
 import 'package:movies_app/Ui/Utils/app_colors.dart';
+import 'package:movies_app/Ui/Utils/my_assets.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 
@@ -87,8 +88,8 @@ class _TopRatedItemState extends State<TopRatedItem> {
                   },
                   child: Image.asset(
                     _isFavorite
-                        ? 'assets/images/bookmark.png' // Selected state image
-                        : 'assets/images/Icon awesome-bookmark.png', // Unselected state image
+                        ? MyAssets.addBookMark // Selected state image
+                        : MyAssets.bookMark, // Unselected state image
                     width: 30.w, // Set the width of the icon image
                     height: 40.h, // Set the height of the icon image
                   ),

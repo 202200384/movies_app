@@ -2,12 +2,13 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:movies_app/Ui/MovieDetails(homeTab)/movie_details_screen.dart';
 import 'package:movies_app/Ui/Utils/app_colors.dart';
 import 'package:movies_app/Ui/tabs/HomeTab/cubit/home_tab_states.dart';
 import 'package:movies_app/Ui/tabs/HomeTab/cubit/home_tab_view_model.dart';
 import 'TopRatedSection.dart';
 import 'UpComingSection.dart';
-import 'movieCard.dart';
+
 
 class HomeTab extends StatefulWidget {
   static const String routeName = "homeTab";
@@ -55,9 +56,16 @@ class _HometabState extends State<HomeTab> {
                         itemCount: viewModel.popularList!.length,
                         itemBuilder: (context, index, realIndex) {
                           final movie = viewModel.popularList![index];
-                          return Image.network(
-                              'https://image.tmdb.org/t/p/w500${movie.posterPath}',
-                          fit: BoxFit.cover,);
+                          return GestureDetector(
+                            onTap: (){
+                              Navigator.push(context,
+                                  MaterialPageRoute(
+                                      builder:(context)=>MovieDetailsScreen(movieId:movie.id!.toInt())));
+                            },
+                            child: Image.network(
+                                'https://image.tmdb.org/t/p/w500${movie.posterPath}',
+                            fit: BoxFit.cover,),
+                          );
                         },
                         options: CarouselOptions(
                           height: 275

@@ -1,8 +1,10 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'package:movies_app/Data/Response/BrowserDiscoveryResponse.dart';
+import 'package:movies_app/Data/Response/BrowserResponse.dart';
 import 'package:movies_app/Data/Response/DetailsResponse.dart';
 import 'package:movies_app/Data/Response/TopRatedOrPopularResponse.dart';
-import 'package:movies_app/Data/Response/SimilarDetailsResponse.dart'; // تأكد من استيراد النموذج الصحيح
+import 'package:movies_app/Data/Response/SimilarDetailsResponse.dart';
 import 'package:movies_app/Data/end_points.dart';
 
 import 'Response/upComingResponse.dart';
@@ -127,6 +129,48 @@ class ApiManager {
       }
     } catch (e) {
       throw Exception('Error fetching similar movies: $e');
+    }
+  }
+
+  static Future<BrowserResponse> getAllMovieList() async {
+    Uri url = Uri.https(baseUrl, EndPoints.movieList, {
+      'api_key': apiKey,
+    });
+    try {
+      var response = await http.get(url);
+
+      if (response.statusCode == 200) {
+        var json = jsonDecode(response.body);
+        print('API Response: $json');
+        return BrowserResponse.fromJson(json);
+      } else {
+        throw Exception(
+            'Failed to load movies. Status code: ${response.statusCode}');
+      }
+    } catch (e) {
+      print('Error fetching data: $e');
+      throw e;
+    }
+  }
+
+  static Future<BrowserDiscoveryResponse> getAllDiscoveryMovieList(String genderId) async {
+    Uri url = Uri.https(baseUrl, EndPoints.DiscoverMovieList, {
+      'api_key': apiKey,
+    });
+    try {
+      var response = await http.get(url);
+
+      if (response.statusCode == 200) {
+        var json = jsonDecode(response.body);
+        print('API Response: $json');
+        return BrowserDiscoveryResponse.fromJson(json);
+      } else {
+        throw Exception(
+            'Failed to load movies. Status code: ${response.statusCode}');
+      }
+    } catch (e) {
+      print('Error fetching data: $e');
+      throw e;
     }
   }
 }
