@@ -1,13 +1,9 @@
-
- // Import your upcoming data model here
-
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:movies_app/Ui/Utils/my_assets.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../../Data/Response/upComingResponse.dart';
-
+// Import your upcoming data model here
 
 class Upcomingitem extends StatefulWidget {
   final upComing? upcoming; // Declare the movie data (optional)
@@ -76,33 +72,14 @@ class _UpcomingitemState extends State<Upcomingitem> {
             },
             child: Image.asset(
               _isFavorite
-                  ? MyAssets.addBookMark // Selected state image
-                  : MyAssets.bookMark, // Unselected state image
+                  ? 'assets/images/bookmark.png' // Selected state image
+                  : 'assets/images/Icon awesome-bookmark.png', // Unselected state image
               width: 30.w, // Set the width of the icon image
               height: 40.h, // Set the height of the icon image
             ),
           ),
         ),
         // Add movie title at the bottom
-        Positioned(
-          bottom: 10.h,
-          left: 10.w,
-          right: 10.w,
-          child: Container(
-            color: Colors.black.withOpacity(0.5),
-            padding: EdgeInsets.symmetric(horizontal: 5.w, vertical: 2.h),
-            child: Text(
-              movie?.title ?? 'Unknown', // Movie title from the data
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 12.sp, // Font size for title
-                fontWeight: FontWeight.bold,
-              ),
-              maxLines: 2,
-              overflow: TextOverflow.ellipsis,
-            ),
-          ),
-        ),
       ],
     );
   }

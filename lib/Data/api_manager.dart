@@ -109,7 +109,7 @@ class ApiManager {
   static Future<SimilarDetailsResponse> getAllSimilarDetails(int movieId) async {
     Uri url = Uri.https(
       baseUrl,
-      '${EndPoints.similarDetails}/$movieId',
+      '${EndPoints.similarDetails}/$movieId/similar',
       {
         'api_key': apiKey,
         'language': language,

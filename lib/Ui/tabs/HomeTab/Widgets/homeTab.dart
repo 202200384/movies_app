@@ -1,3 +1,4 @@
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -39,40 +40,71 @@ class _HometabState extends State<HomeTab> {
                 child: Column(
                   children: [
                     // Popular Section
-                    viewModel.popularList == null ||
-                        viewModel.popularList!.isEmpty
-                        ? Center(
-                      child: CircularProgressIndicator(
-                        color: AppColors
-                            .whiteColorText, // Change color for visibility
+                    Container(
+                      height: 275.h, // Define height for Popular section
+                      alignment: Alignment.center,
+                      child: viewModel.popularList == null ||
+                          viewModel.popularList!.isEmpty
+                          ? Center(
+                        child: CircularProgressIndicator(
+                          color: AppColors
+                              .whiteColorText, // Customize the color
+                        ),
+                      )
+                          : CarouselSlider.builder(
+                        itemCount: viewModel.popularList!.length,
+                        itemBuilder: (context, index, realIndex) {
+                          final movie = viewModel.popularList![index];
+                          return Image.network(
+                              'https://image.tmdb.org/t/p/w500${movie.posterPath}',
+                          fit: BoxFit.cover,);
+                        },
+                        options: CarouselOptions(
+                          height: 275
+                              .h, // Use the same height as the container
+                          enlargeCenterPage: true,
+                          autoPlay: true,
+                          autoPlayInterval: Duration(seconds: 2),
+                          viewportFraction: 0.8,
+                          aspectRatio: 16 / 9,
+                          initialPage: 0,
+                        ),
                       ),
-                    )
-                        : MovieCard(movieCard: viewModel.popularList!.first,),
-                    SizedBox(height: 10.h),
-                    // Upcoming Section
-                    viewModel.upComingList == null ||
-                        viewModel.upComingList!.isEmpty
-                        ? Center(
-                      child: CircularProgressIndicator(
-                        color: AppColors.whiteColorText,
-                      ),
-                    )
-                        : upComingSection(
-                      name: 'New Releases',
-                      upComingList: viewModel.upComingList!,
                     ),
-                    SizedBox(height: 10.h),
-                    // Top Rated Section
-                    viewModel.topRatedList == null ||
-                        viewModel.topRatedList!.isEmpty
-                        ? Center(
-                      child: CircularProgressIndicator(
+
+                    // SizedBox(height: 5.h),
+
+                    // Upcoming Section
+                    Container(
+                      height: 215.h, // Define height for Upcoming section
+                      alignment: Alignment.center,
+                      child: viewModel.upComingList == null ||
+                          viewModel.upComingList!.isEmpty
+                          ? CircularProgressIndicator(
                         color: AppColors.whiteColorText,
+                      )
+                          : upComingSection(
+                        name: 'New Releases',
+                        upComingList: viewModel.upComingList!,
                       ),
-                    )
-                        : TopRatedSection(
-                      name: 'Recommended',
-                      topRatedList: viewModel.topRatedList!,
+                    ),
+                    SizedBox(height: 25.h),
+
+                    // Top Rated Section
+                    Container(
+                      height: 240.h,
+                      color: AppColors
+                          .greySearchBarColor, // Define height for Top Rated section
+                      alignment: Alignment.center,
+                      child: viewModel.topRatedList == null ||
+                          viewModel.topRatedList!.isEmpty
+                          ? CircularProgressIndicator(
+                        color: AppColors.whiteColorText,
+                      )
+                          : TopRatedSection(
+                        name: 'Recommended',
+                        topRatedList: viewModel.topRatedList!,
+                      ),
                     ),
                   ],
                 ),

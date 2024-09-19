@@ -1,11 +1,10 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-
+import 'package:movies_app/Ui/Utils/app_colors.dart';
+import 'package:movies_app/Ui/tabs/HomeTab/Widgets/upComingItem.dart';
 
 import '../../../../Data/Response/upComingResponse.dart';
-import '../../../Utils/app_colors.dart';
-import 'upComingItem.dart';
 
 
 class upComingSection extends StatefulWidget {
@@ -38,7 +37,7 @@ class _upComingSectionState extends State<upComingSection> {
           ),
           SizedBox(height: 20.h),
           SizedBox(
-            height: 175.h, // Wrapping GridView in a SizedBox for height
+            height: 150.h, // Wrapping GridView in a SizedBox for height
             child: GridView.builder(
               scrollDirection: Axis.horizontal,
               itemCount: widget.upComingList.length,

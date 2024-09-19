@@ -23,7 +23,7 @@ class MovieDetailsViewModel extends Cubit<MovieDetailsStates> {
     emit(MovieDetailsLoadingState());
     try {
       final similarDetails = await ApiManager.getAllSimilarDetails(movieId);
-      emit(MovieDetailsSimilarSuccessState(details: similarDetails));
+      emit(MovieSimilarDetailsSuccessState(details: similarDetails));
     } catch (e) {
       emit(MovieDetailsErrorState("An error occurred: $e"));
     }

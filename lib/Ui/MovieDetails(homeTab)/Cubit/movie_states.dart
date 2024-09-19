@@ -6,6 +6,7 @@ class MovieDetailsInitialState extends MovieDetailsStates{}
 class MovieDetailsLoadingState extends MovieDetailsStates{}
 class MovieDetailsSuccessState extends MovieDetailsStates{
   final DetailsResponse details;
+
   MovieDetailsSuccessState({required this.details});
 }
 class MovieDetailsErrorState extends MovieDetailsStates{
@@ -13,12 +14,15 @@ class MovieDetailsErrorState extends MovieDetailsStates{
   MovieDetailsErrorState(this.errorMsg);
 }
 
-class MovieDetailsSimilarLoadingState extends MovieDetailsStates{}
-class MovieDetailsSimilarSuccessState extends MovieDetailsStates{
+
+class MovieSimilarDetailsLoadingState extends MovieDetailsStates{}
+class MovieSimilarDetailsSuccessState extends MovieDetailsStates{
   final SimilarDetailsResponse details;
-  MovieDetailsSimilarSuccessState({required this.details});
+
+  MovieSimilarDetailsSuccessState({required this.details});
 }
-class MovieDetailsSimilarErrorState extends MovieDetailsStates{
+class MovieSimilarDetailsErrorState extends MovieDetailsStates{
   String errorMsg;
-  MovieDetailsSimilarErrorState(this.errorMsg);
+  MovieSimilarDetailsErrorState(this.errorMsg);
 }
+
