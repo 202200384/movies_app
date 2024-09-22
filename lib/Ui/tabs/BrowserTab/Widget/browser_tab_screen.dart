@@ -5,14 +5,13 @@ import 'package:movies_app/Ui/Utils/app_colors.dart';
 import 'package:movies_app/Ui/tabs/BrowserTab/Widget/browser_item.dart';
 import 'package:movies_app/Ui/tabs/BrowserTab/cubit/browser_tab_states.dart';
 import 'package:movies_app/Ui/tabs/BrowserTab/cubit/browser_tab_view_model.dart';
-
 import '../../../../Data/Response/BrowserDiscoveryResponse.dart';
 import '../../../../Data/Response/BrowserResponse.dart';
 
 class BrowserTabScreen extends StatefulWidget {
   static const String routeName = "browser";
 
-  BrowserTabScreen({Key? key}) : super(key: key);
+  const BrowserTabScreen({Key? key}) : super(key: key);
 
   @override
   State<BrowserTabScreen> createState() => _BrowserTabScreenState();
@@ -24,7 +23,8 @@ class _BrowserTabScreenState extends State<BrowserTabScreen> {
   @override
   void initState() {
     super.initState();
-    viewModel = BrowserTabViewModel()..getAllMovieList();
+    viewModel = BrowserTabViewModel();
+    viewModel.getAllMovieList();
   }
 
   @override
@@ -63,7 +63,14 @@ class _BrowserTabScreenState extends State<BrowserTabScreen> {
                     var genres = state.browserResponse.genres ?? [];
                     return _buildMovieGrid(genres: genres, isDiscovery: false);
                   }
-                  return const Center(child: Text('No Data Available'));
+
+
+                  var cachedGenres = viewModel.cachedGenres;
+                  if (cachedGenres != null && cachedGenres.isNotEmpty) {
+                    return _buildMovieGrid(genres: cachedGenres, isDiscovery: false);
+                  }
+
+                  return const Center(child: SizedBox());
                 },
               ),
               // Discovery Tab
@@ -108,8 +115,8 @@ class _BrowserTabScreenState extends State<BrowserTabScreen> {
           return InkWell(
             onTap: () {
               if (!isDiscovery) {
-                String genderId = item.id.toString();
-                viewModel.getAllDiscoveryMovieList(genderId);
+                String genreId = item.id.toString();
+                viewModel.getAllDiscoveryMovieList(genreId);
                 DefaultTabController.of(context).animateTo(1);
               }
             },

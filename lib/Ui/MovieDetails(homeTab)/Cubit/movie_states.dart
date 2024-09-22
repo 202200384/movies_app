@@ -1,5 +1,6 @@
 import 'package:movies_app/Data/Response/DetailsResponse.dart';
-import 'package:movies_app/Data/Response/SimilarDetailsResponse.dart';
+
+import 'package:movies_app/Data/Response/SimilarMoviesResponse.dart';
 
 abstract class MovieDetailsStates{}
 class MovieDetailsInitialState extends MovieDetailsStates{}
@@ -17,12 +18,11 @@ class MovieDetailsErrorState extends MovieDetailsStates{
 
 class MovieSimilarDetailsLoadingState extends MovieDetailsStates{}
 class MovieSimilarDetailsSuccessState extends MovieDetailsStates{
-  final SimilarDetailsResponse details;
+  final SimilarDetailsResponse similarDetails;
 
-  MovieSimilarDetailsSuccessState({required this.details});
+  MovieSimilarDetailsSuccessState({required this.similarDetails});
 }
 class MovieSimilarDetailsErrorState extends MovieDetailsStates{
   String errorMsg;
   MovieSimilarDetailsErrorState(this.errorMsg);
 }
-

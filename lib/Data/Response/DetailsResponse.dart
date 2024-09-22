@@ -1,35 +1,35 @@
 class DetailsResponse {
   DetailsResponse({
-      this.adult, 
-      this.backdropPath, 
-      this.belongsToCollection, 
-      this.budget, 
-      this.genres, 
-      this.homepage, 
-      this.id,
-      this.success,
-      this.status_code,
-      this.status_message,
-      this.imdbId, 
-      this.originCountry, 
-      this.originalLanguage, 
-      this.originalTitle, 
-      this.overview, 
-      this.popularity, 
-      this.posterPath, 
-      this.productionCompanies, 
-      this.productionCountries, 
-      this.releaseDate, 
-      this.revenue, 
-      this.runtime, 
-      this.spokenLanguages, 
-      this.status, 
-      this.tagline, 
-      this.title, 
-      this.video, 
-      this.voteAverage, 
-      this.voteCount, 
-      this.videos,});
+    this.adult,
+    this.backdropPath,
+    this.belongsToCollection,
+    this.budget,
+    this.genres,
+    this.homepage,
+    this.id,
+    this.success,
+    this.status_code,
+    this.status_message,
+    this.imdbId,
+    this.originCountry,
+    this.originalLanguage,
+    this.originalTitle,
+    this.overview,
+    this.popularity,
+    this.posterPath,
+    this.productionCompanies,
+    this.productionCountries,
+    this.releaseDate,
+    this.revenue,
+    this.runtime,
+    this.spokenLanguages,
+    this.status,
+    this.tagline,
+    this.title,
+    this.video,
+    this.voteAverage,
+    this.voteCount,
+    this.videos,});
 
   DetailsResponse.fromJson(dynamic json) {
     adult = json['adult'];
@@ -160,7 +160,7 @@ class DetailsResponse {
 
 class Videos {
   Videos({
-      this.results,});
+    this.results,});
 
   Videos.fromJson(dynamic json) {
     if (json['results'] != null) {
@@ -184,16 +184,16 @@ class Videos {
 
 class Results {
   Results({
-      this.iso6391, 
-      this.iso31661, 
-      this.name, 
-      this.key, 
-      this.site, 
-      this.size, 
-      this.type, 
-      this.official, 
-      this.publishedAt, 
-      this.id,});
+    this.iso6391,
+    this.iso31661,
+    this.name,
+    this.key,
+    this.site,
+    this.size,
+    this.type,
+    this.official,
+    this.publishedAt,
+    this.id,});
 
   Results.fromJson(dynamic json) {
     iso6391 = json['iso_639_1'];
@@ -237,9 +237,9 @@ class Results {
 
 class SpokenLanguages {
   SpokenLanguages({
-      this.englishName, 
-      this.iso6391, 
-      this.name,});
+    this.englishName,
+    this.iso6391,
+    this.name,});
 
   SpokenLanguages.fromJson(dynamic json) {
     englishName = json['english_name'];
@@ -262,8 +262,8 @@ class SpokenLanguages {
 
 class ProductionCountries {
   ProductionCountries({
-      this.iso31661, 
-      this.name,});
+    this.iso31661,
+    this.name,});
 
   ProductionCountries.fromJson(dynamic json) {
     iso31661 = json['iso_3166_1'];
@@ -283,10 +283,10 @@ class ProductionCountries {
 
 class ProductionCompanies {
   ProductionCompanies({
-      this.id, 
-      this.logoPath, 
-      this.name, 
-      this.originCountry,});
+    this.id,
+    this.logoPath,
+    this.name,
+    this.originCountry,});
 
   ProductionCompanies.fromJson(dynamic json) {
     id = json['id'];
@@ -312,8 +312,8 @@ class ProductionCompanies {
 
 class Genres {
   Genres({
-      this.id, 
-      this.name,});
+    this.id,
+    this.name,});
 
   Genres.fromJson(dynamic json) {
     id = json['id'];

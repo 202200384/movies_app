@@ -3,8 +3,9 @@ import 'package:http/http.dart' as http;
 import 'package:movies_app/Data/Response/BrowserDiscoveryResponse.dart';
 import 'package:movies_app/Data/Response/BrowserResponse.dart';
 import 'package:movies_app/Data/Response/DetailsResponse.dart';
+import 'package:movies_app/Data/Response/SimilarMoviesResponse.dart';
 import 'package:movies_app/Data/Response/TopRatedOrPopularResponse.dart';
-import 'package:movies_app/Data/Response/SimilarDetailsResponse.dart';
+
 import 'package:movies_app/Data/end_points.dart';
 
 import 'Response/upComingResponse.dart';
@@ -156,6 +157,7 @@ class ApiManager {
   static Future<BrowserDiscoveryResponse> getAllDiscoveryMovieList(String genderId) async {
     Uri url = Uri.https(baseUrl, EndPoints.DiscoverMovieList, {
       'api_key': apiKey,
+      'with_genres':genderId
     });
     try {
       var response = await http.get(url);

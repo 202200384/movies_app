@@ -7,9 +7,10 @@ import 'package:movies_app/Ui/MovieDetails(homeTab)/Cubit/movie_states.dart';
 
 
 class MovieDetailsViewModel extends Cubit<MovieDetailsStates> {
+
   MovieDetailsViewModel() : super(MovieDetailsInitialState());
 
-  void getAllDetails(int movieId) async {
+  Future<void> getAllDetails(int movieId) async {
     emit(MovieDetailsLoadingState());
     try {
       final movieDetails = await ApiManager.getAllDetails(movieId);
@@ -19,13 +20,13 @@ class MovieDetailsViewModel extends Cubit<MovieDetailsStates> {
     }
   }
 
-  void getAllSimilarDetails(int movieId) async {
-    emit(MovieDetailsLoadingState());
+  Future<void> getAllSimilarDetails(int movieId) async {
+    emit(MovieSimilarDetailsLoadingState());
     try {
       final similarDetails = await ApiManager.getAllSimilarDetails(movieId);
-      emit(MovieSimilarDetailsSuccessState(details: similarDetails));
+      emit(MovieSimilarDetailsSuccessState(similarDetails: similarDetails));
     } catch (e) {
-      emit(MovieDetailsErrorState("An error occurred: $e"));
+      emit(MovieSimilarDetailsErrorState("An error occurred: $e"));
     }
   }
 }

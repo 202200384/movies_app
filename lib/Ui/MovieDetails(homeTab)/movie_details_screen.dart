@@ -9,13 +9,16 @@ class MovieDetailsScreen extends StatelessWidget {
   static const String routeName = 'movie_details';
   final int movieId;
   MovieDetailsScreen({required this.movieId});
-
+ MovieDetailsViewModel cubit = MovieDetailsViewModel();
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => MovieDetailsViewModel()
+      create: (context) {
+
+     return cubit
         ..getAllDetails(movieId)
-        ..getAllSimilarDetails(movieId),
+        ..getAllSimilarDetails(movieId);
+      },
       child: SafeArea(
         child: Scaffold(
           appBar: AppBar(
@@ -213,7 +216,7 @@ class MovieDetailsScreen extends StatelessWidget {
                       ),
                     );
                   } else if (state is MovieSimilarDetailsSuccessState) {
-                    final similarDetails = state.details.results;
+                    final similarDetails = state.similarDetails.results;
                     return Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [

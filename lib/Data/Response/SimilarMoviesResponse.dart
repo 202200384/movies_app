@@ -1,19 +1,19 @@
 class SimilarDetailsResponse {
   SimilarDetailsResponse({
-      this.page, 
-      this.results, 
-      this.totalPages, 
-      this.totalResults,
-  this.success,
-  this.status_code,
-  this.status_message});
+    this.page,
+    this.results,
+    this.totalPages,
+    this.totalResults,
+    this.success,
+    this.status_code,
+    this.status_message});
 
   SimilarDetailsResponse.fromJson(dynamic json) {
     page = json['page'];
     if (json['results'] != null) {
       results = [];
       json['results'].forEach((v) {
-        results?.add(Results.fromJson(v));
+        results?.add(SimilarMovie.fromJson(v));
       });
     }
     totalPages = json['total_pages'];
@@ -24,7 +24,7 @@ class SimilarDetailsResponse {
   }
   num? page;
   num?status_code;
-  List<Results>? results;
+  List<SimilarMovie>? results;
   num? totalPages;
   num? totalResults;
   String?status_message;
@@ -43,24 +43,24 @@ class SimilarDetailsResponse {
 
 }
 
-class Results {
-  Results({
-      this.adult, 
-      this.backdropPath, 
-      this.genreIds, 
-      this.id, 
-      this.originalLanguage, 
-      this.originalTitle, 
-      this.overview, 
-      this.popularity, 
-      this.posterPath, 
-      this.releaseDate, 
-      this.title, 
-      this.video, 
-      this.voteAverage, 
-      this.voteCount,});
+class SimilarMovie {
+  SimilarMovie({
+    this.adult,
+    this.backdropPath,
+    this.genreIds,
+    this.id,
+    this.originalLanguage,
+    this.originalTitle,
+    this.overview,
+    this.popularity,
+    this.posterPath,
+    this.releaseDate,
+    this.title,
+    this.video,
+    this.voteAverage,
+    this.voteCount,});
 
-  Results.fromJson(dynamic json) {
+  SimilarMovie.fromJson(dynamic json) {
     adult = json['adult'];
     backdropPath = json['backdrop_path'];
     genreIds = json['genre_ids'] != null ? json['genre_ids'].cast<num>() : [];

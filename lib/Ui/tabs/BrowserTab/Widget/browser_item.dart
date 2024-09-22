@@ -8,7 +8,7 @@ class BrowserItem extends StatelessWidget {
   final Browser? browser;
   final Results? discoveryMovie;
 
-  BrowserItem({Key? key, this.browser, this.discoveryMovie}) : super(key: key);
+  const BrowserItem({Key? key, this.browser, this.discoveryMovie}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -19,9 +19,7 @@ class BrowserItem extends StatelessWidget {
           height: 150.h,
           decoration: BoxDecoration(
             image: DecorationImage(
-              image: discoveryMovie != null && discoveryMovie?.posterPath != null
-                  ? NetworkImage(_getImageForItem())
-                  : AssetImage(_getImageForItem()) as ImageProvider,
+              image: _getImageProvider(),
               fit: BoxFit.cover,
             ),
           ),
@@ -37,7 +35,7 @@ class BrowserItem extends StatelessWidget {
                 Shadow(
                   blurRadius: 10.0.r,
                   color: Colors.black.withOpacity(0.7),
-                  offset: Offset(2, 2),
+                  offset: const Offset(2, 2),
                 ),
               ],
             ),
@@ -47,11 +45,16 @@ class BrowserItem extends StatelessWidget {
     );
   }
 
-  String _getImageForItem() {
+  ImageProvider _getImageProvider() {
     if (discoveryMovie?.posterPath != null) {
-      return 'https://image.tmdb.org/t/p/w500${discoveryMovie!.posterPath}';
+      return NetworkImage('https://image.tmdb.org/t/p/w500${discoveryMovie!.posterPath}');
     }
 
+
+    return AssetImage(_getDefaultImageForGenre());
+  }
+
+  String _getDefaultImageForGenre() {
     switch (browser?.name?.toLowerCase()) {
       case 'comedy':
         return MyAssets.BestCommedies;
