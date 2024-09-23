@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:movies_app/Data/Response/TopRatedOrPopularResponse.dart';
 import 'package:movies_app/Ui/Utils/my_assets.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 
 class MovieList extends StatefulWidget {
@@ -70,8 +71,20 @@ class MovieCard extends StatefulWidget {
 class _MovieCardState extends State<MovieCard> {
   bool _isFavorite = false;
 
-  void _saveIconState() {
-    // Implement save logic here
+  @override
+  void initState() {
+    super.initState();
+    _loadIconState();
+  }
+  void _loadIconState() async{
+    SharedPreferences prefs= await SharedPreferences.getInstance();
+    setState(() {
+      _isFavorite = prefs.getBool('isFavorite_${widget.moviecard?.id}')?? false;
+    });
+  }
+  void _saveIconState() async{
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setBool('isFavorite_${widget.moviecard?.id}', _isFavorite);
   }
 
   @override
@@ -171,47 +184,46 @@ class _MovieCardState extends State<MovieCard> {
               ),
             ),
             // Smaller image at the bottom-left
-            Positioned(
-              top: 95.h,
-              bottom: 0.h,
-              left: 10.w,
-              child: Container(
-                margin: EdgeInsets.all(10),
-                height: 140.h,
-                width: 100.w,
-                decoration: BoxDecoration(
-                  image: DecorationImage(
-                    image: NetworkImage(
-                      'https://image.tmdb.org/t/p/w500${widget.moviecard?.posterPath ?? ""}',
-                    ),
-                    fit: BoxFit.cover,
-                  ),
-                ),
+
+        Positioned(
+        top: 95.h,
+        bottom: 0.h,
+        left: 10.w,
+        child: Container(
+          margin: EdgeInsets.all(10),
+          height: 140.h,
+          width: 100.w,
+          decoration: BoxDecoration(
+            image: DecorationImage(
+              image: NetworkImage(
+                'https://image.tmdb.org/t/p/w500${widget.moviecard?.posterPath ?? ""}',
               ),
+              fit: BoxFit.cover,
             ),
-            // Bookmark Icon
-            Positioned(
-              left: 15.w,
-              top: 105.h,
-              child: GestureDetector(
-                onTap: () {
-                  setState(() {
-                    _isFavorite = !_isFavorite; // Toggle state
-                    _saveIconState(); // Save state
-                  });
-                },
-                child: Image.asset(
-                  _isFavorite
-                      ? MyAssets.addBookMark
-                      : MyAssets.bookMark,
-                  width: 30.w,
-                  height: 40.h,
-                ),
-              ),
-            ),
-          ],
+          ),
         ),
       ),
-    );
+        // Bookmark Icon
+        Positioned(
+          left: 15.w,
+          top: 105.h,
+          child: GestureDetector(
+            onTap: () {
+              setState(() {
+                _isFavorite = !_isFavorite; // Toggle state
+                _saveIconState(); // Save state
+              });
+            },
+            child: Image.asset(
+              _isFavorite
+                  ? MyAssets.addBookMark
+                  : MyAssets.bookMark,
+              width: 30.w,
+              height: 40.h,
+            ),
+          ),
+        ),
+      ]))
+      );
   }
 }

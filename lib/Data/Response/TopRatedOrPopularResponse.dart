@@ -5,7 +5,9 @@ class TopRatedOrPopularResponse {
         this.totalPages,
         this.totalResults,
         this.message,
-        this.status_message});
+        this.status_message,
+
+      });
 
   TopRatedOrPopularResponse.fromJson(dynamic json) {
     page = json['page'];
@@ -55,6 +57,7 @@ class topRatedOrPopular {
     this.video,
     this.voteAverage,
     this.voteCount,
+    this.runtime,
   });
 
   topRatedOrPopular.fromJson(dynamic json) {
@@ -72,6 +75,7 @@ class topRatedOrPopular {
     video = json['video'];
     voteAverage = json['vote_average'];
     voteCount = json['vote_count'];
+    runtime=json['runtime'];
   }
   bool? adult;
   String? backdropPath;
@@ -87,6 +91,7 @@ class topRatedOrPopular {
   bool? video;
   num? voteAverage;
   num? voteCount;
+  num?runtime;
 
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};

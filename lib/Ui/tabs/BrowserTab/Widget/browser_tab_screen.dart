@@ -2,9 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:movies_app/Ui/Utils/app_colors.dart';
+import 'package:movies_app/Ui/homeScreen/home_screen.dart';
 import 'package:movies_app/Ui/tabs/BrowserTab/Widget/browser_item.dart';
 import 'package:movies_app/Ui/tabs/BrowserTab/cubit/browser_tab_states.dart';
 import 'package:movies_app/Ui/tabs/BrowserTab/cubit/browser_tab_view_model.dart';
+import 'package:movies_app/Ui/tabs/HomeTab/Widgets/homeTab.dart';
 import '../../../../Data/Response/BrowserDiscoveryResponse.dart';
 import '../../../../Data/Response/BrowserResponse.dart';
 
@@ -87,7 +89,18 @@ class _BrowserTabScreenState extends State<BrowserTabScreen> {
                     );
                   } else if (state is BrowserDiscoveryTabSuccessState) {
                     var discoveryMovies = state.browserDiscoveryResponse.results ?? [];
-                    return _buildMovieGrid(genres: discoveryMovies, isDiscovery: true);
+                    return Column(
+                      children: [
+                        Expanded(
+                            child: _buildMovieGrid(
+                                genres: discoveryMovies, isDiscovery: true)),
+                        ElevatedButton(
+                            onPressed: (){
+                              Navigator.pushNamed(context, HomeScreen.routeName);
+                            },
+                            child:Text('Go to Home'))
+                      ],
+                    );
                   }
                   return const Center(child: Text('No Data Available'));
                 },

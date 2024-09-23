@@ -30,14 +30,14 @@ class _TopRatedItemState extends State<TopRatedItem> {
   void _loadIconState() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     setState(() {
-      _isFavorite = prefs.getBool('isFavorite') ?? false;
+      _isFavorite = prefs.getBool('isFavorite_${widget.topratedorpopular!.id}') ?? false;
     });
   }
 
   // Save the icon state to SharedPreferences
   void _saveIconState() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs.setBool('isFavorite', _isFavorite);
+    prefs.setBool('isFavorite_${widget.topratedorpopular!.id}', _isFavorite);
   }
 
   @override
