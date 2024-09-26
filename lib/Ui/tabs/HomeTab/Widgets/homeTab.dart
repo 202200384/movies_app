@@ -21,12 +21,12 @@ class HomeTab extends StatefulWidget {
 
 class _HometabState extends State<HomeTab> {
   HomeTabViewModel viewModel = HomeTabViewModel();
-  List<bool> _favoriteStates = []; // قائمة لتتبع حالة المفضلة لكل فيلم
+  List<bool> _favoriteStates = [];
 
   @override
   void initState() {
     super.initState();
-    _loadFavoriteStates(); // استرجاع الحالة عند البناء
+    _loadFavoriteStates();
   }
 
   void _loadFavoriteStates() async {
@@ -42,7 +42,7 @@ class _HometabState extends State<HomeTab> {
 
   void _saveFavoriteState(int movieId, bool isFavorite) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs.setBool('isFavorite_$movieId', isFavorite); // حفظ الحالة
+    prefs.setBool('isFavorite_$movieId', isFavorite);
   }
 
   @override
@@ -57,10 +57,10 @@ class _HometabState extends State<HomeTab> {
           return Center(child: CircularProgressIndicator());
         }
 
-        // تحديث قائمة حالات المفضلة عند تحميل الأفلام الشعبية
+
         if (_favoriteStates.length != viewModel.popularList!.length) {
           _favoriteStates = List<bool>.filled(viewModel.popularList!.length, false);
-          _loadFavoriteStates(); // استرجاع الحالات
+          _loadFavoriteStates();
         }
 
         return Scaffold(
@@ -74,7 +74,7 @@ class _HometabState extends State<HomeTab> {
             child: SingleChildScrollView(
               child: Column(
                 children: [
-                  // قسم الأفلام الشعبية
+
                   Container(
                     height: 380.h,
                     alignment: Alignment.center,
@@ -188,7 +188,7 @@ class _HometabState extends State<HomeTab> {
                     ),
                   ),
 
-                  // قسم الأفلام القادمة
+
                   Container(
                     height: 215.h,
                     alignment: Alignment.center,
@@ -204,7 +204,7 @@ class _HometabState extends State<HomeTab> {
                   ),
                   SizedBox(height: 25.h),
 
-                  // قسم الأفلام الأعلى تصنيفًا
+
                   Container(
                     height: 240.h,
                     color: AppColors.greySearchBarColor,

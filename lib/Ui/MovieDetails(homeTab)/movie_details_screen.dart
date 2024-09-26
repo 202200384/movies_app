@@ -9,15 +9,15 @@ class MovieDetailsScreen extends StatelessWidget {
   static const String routeName = 'movie_details';
   final int movieId;
   MovieDetailsScreen({required this.movieId});
- MovieDetailsViewModel cubit = MovieDetailsViewModel();
+  MovieDetailsViewModel cubit = MovieDetailsViewModel();
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) {
 
-     return cubit
-        ..getAllDetails(movieId)
-        ..getAllSimilarDetails(movieId);
+        return cubit
+          ..getAllDetails(movieId)
+          ..getAllSimilarDetails(movieId);
       },
       child: SafeArea(
         child: Scaffold(

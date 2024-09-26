@@ -113,7 +113,7 @@ class _TopRatedItemState extends State<TopRatedItem> {
                       // Rating Row
                       Row(
                         children: [
-                          Icon(Icons.star, color: Colors.yellow, size: 18.w),
+                          Icon(Icons.star, color: AppColors.yellow, size: 18.w),
                           SizedBox(width: 4.w),
                           Text(
                             "${widget.topratedorpopular!.voteAverage ?? ""}", // Movie rating
