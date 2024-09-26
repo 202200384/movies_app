@@ -100,8 +100,20 @@ class _HometabState extends State<HomeTab> {
                                 child: Image.network(
                                   'https://image.tmdb.org/t/p/w500${movie.posterPath}',
                                   fit: BoxFit.cover,
+                                ),),
+                                Positioned(
+                                  left: 150.w,
+                                  bottom: 140.h,
+                                  child: CircleAvatar(
+                                    radius: 30,
+                                    backgroundColor: Colors.white,
+                                    child: IconButton(
+                                      icon: Icon(Icons.play_arrow, size: 30),
+                                      onPressed: () {},
+                                    ),
+                                  ),
                                 ),
-                              ),
+
                               Padding(
                                 padding: EdgeInsets.only(top: 198.h, left: 150.w),
                                 child: SingleChildScrollView(

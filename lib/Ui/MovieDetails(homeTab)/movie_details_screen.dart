@@ -4,20 +4,52 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:movies_app/Ui/MovieDetails(homeTab)/Cubit/movie_details_view_model.dart';
 import 'package:movies_app/Ui/MovieDetails(homeTab)/Cubit/movie_states.dart';
 import 'package:movies_app/Ui/Utils/app_colors.dart';
+import 'package:movies_app/Ui/Utils/my_assets.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-class MovieDetailsScreen extends StatelessWidget {
+class MovieDetailsScreen extends StatefulWidget {
   static const String routeName = 'movie_details';
   final int movieId;
   MovieDetailsScreen({required this.movieId});
+
+  @override
+  State<MovieDetailsScreen> createState() => _MovieDetailsScreenState();
+}
+
+class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
   MovieDetailsViewModel cubit = MovieDetailsViewModel();
+  bool isExpanded=false;
+  bool isFavorite = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadFavoriteStates();
+  }
+
+  void _loadFavoriteStates() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    setState(() {
+      isFavorite = prefs.getBool('isFavorite_${widget.movieId}') ?? false;
+    });
+  }
+
+  void _saveFavoriteState() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    setState(() {
+      isFavorite = !isFavorite;
+      prefs.setBool('isFavorite_${widget.movieId}', isFavorite);
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) {
 
         return cubit
-          ..getAllDetails(movieId)
-          ..getAllSimilarDetails(movieId);
+          ..getAllDetails(widget.movieId)
+          ..getAllSimilarDetails(widget.movieId);
       },
       child: SafeArea(
         child: Scaffold(
@@ -126,37 +158,32 @@ class MovieDetailsScreen extends StatelessWidget {
                                           movie.posterPath != null
                                               ? 'https://image.tmdb.org/t/p/w500${movie.posterPath}'
                                               : 'https://via.placeholder.com/100x150?text=No+Image',
-                                          width: 100.w,
-                                          height: 150.h,
+                                          width: 129.w,
+                                          height: 220.h,
                                           fit: BoxFit.contain,
                                           errorBuilder: (context, error, stackTrace) {
                                             return Center(child: Text('Image failed to load'));
                                           },
                                         ),
+                                      ),Positioned(
+                                        top: 8.h,
+                                          left: 8.w,
+                                          child: GestureDetector(
+                                           onTap: _saveFavoriteState,
+                                            child: Image.asset(isFavorite?
+                                            MyAssets.addBookMark
+                                            :
+                                            MyAssets.bookMark,
+                                            width:30.w,
+                                            height: 30.h,)
+                                          ),
                                       ),
                                       SizedBox(width: 12.w),
                                       Expanded(
                                         child: Column(
                                           crossAxisAlignment: CrossAxisAlignment.start,
                                           children: [
-                                            SizedBox(height: 10.h),
-                                            Text(
-                                              movie.title ?? "No Title Available",
-                                              style: TextStyle(
-                                                fontSize: 20.sp,
-                                                fontWeight: FontWeight.bold,
-                                                color: Colors.white,
-                                              ),
-                                            ),
-                                            SizedBox(height: 8.h),
-                                            Text(
-                                              '${movie.releaseDate ?? "No release date"}, ${movie.runtime != null ? "${movie.runtime} mins" : "No runtime"}',
-                                              style: TextStyle(
-                                                fontSize: 14.sp,
-                                                color: Colors.grey,
-                                              ),
-                                            ),
-                                            SizedBox(height: 10.h),
+                                            SizedBox(height: 4.h),
                                             Wrap(
                                               spacing: 6.w,
                                               runSpacing: 6.h,
@@ -170,7 +197,22 @@ class MovieDetailsScreen extends StatelessWidget {
                                             SizedBox(height: 10.h),
                                             Text(
                                               movie.overview ?? "No description available",
+                                              maxLines: isExpanded ? null : 2,
+                                              overflow: TextOverflow.fade,
                                               style: TextStyle(color: Colors.grey.shade300, fontSize: 14.sp),
+                                            ),
+                                            InkWell(
+                                              onTap: (){
+                                                setState(() {
+                                                  isExpanded = !isExpanded;
+                                                });
+                                              },
+                                              child: Text(isExpanded ? "show less" : "show more",
+                                              style: TextStyle(
+                                                color: AppColors.whiteColorText,
+                                                fontSize: 14.sp,
+                                                fontWeight: FontWeight.bold
+                                              ),),
                                             ),
                                             SizedBox(height: 10.h),
                                             Row(
